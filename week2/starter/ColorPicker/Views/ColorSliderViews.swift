@@ -1,15 +1,15 @@
 /// Copyright (c) 2023 Kodeco Inc.
-///
+/// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-///
+/// 
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-///
+/// 
 /// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
 /// distribute, sublicense, create a derivative work, and/or sell copies of the
 /// Software in any work that is designed, intended, or marketed for pedagogical or
@@ -17,7 +17,7 @@
 /// or information technology.  Permission for such use, copying, modification,
 /// merger, publication, distribution, sublicensing, creation of derivative works,
 /// or sale is expressly withheld.
-///
+/// 
 /// This project and source code may use libraries or frameworks that are
 /// released under various Open-Source licenses. Use of those libraries and
 /// frameworks are governed by their own individual licenses.
@@ -32,43 +32,39 @@
 
 import SwiftUI
 
-struct ContentView: View {
-  private let initalColor = Color(
-    red: Constants.Color.redInit / Constants.maxValue,
-    green: Constants.Color.greenInit / Constants.maxValue,
-    blue: Constants.Color.greenInit / Constants.maxValue
-  )
-  @State private var alertIsVisible: Bool = false
-  @State private var redColor: Double = Constants.Color.redInit
-  @State private var greenColor: Double = Constants.Color.greenInit
-  @State private var blueColor: Double = Constants.Color.blueInit
-  @State private var foregroundColor: Color
-  
-  init() {
-    self.foregroundColor = self.initalColor
-  }
+struct ColorSliders: View {
+  @Binding var redColor: Double
+  @Binding var greenColor: Double
+  @Binding var blueColor: Double
   
   var body: some View {
-
     VStack {
-      TitleView(text: "Color Picker")
-      ColorVisualizer(foregroundColor: $foregroundColor)
-      ColorPickerControlsView(
-        redColor: $redColor,
-        greenColor: $greenColor,
-        blueColor: $blueColor,
-        foregroundColor: $foregroundColor
-      )
+      ColorSliderView(colorName: "Red", accentColor: .red, colorValue: $redColor)
+      ColorSliderView(colorName: "Green", accentColor: .green, colorValue: $greenColor)
+      ColorSliderView(colorName: "Blue", accentColor: .blue, colorValue: $blueColor)
     }
-    .padding(Constants.padding)
   }
 }
 
-struct ContentView_Previews: PreviewProvider {
-  static var previews: some View {
-    ContentView()
-    ContentView()
-      .preferredColorScheme(.dark)
-      .previewInterfaceOrientation(.landscapeRight)
+struct ColorSliderView: View {
+  var colorName: String
+  var accentColor: Color
+  @Binding var colorValue: Double
+  
+  var body: some View {
+    VStack {
+      SliderLabelView(text: colorName)
+      HStack {
+        Slider(value: $colorValue, in: 0...Constants.maxValue)
+          .accentColor(accentColor)
+        Text("\(Int(colorValue.rounded()))")
+      }
+    }
   }
+}
+
+struct ColorSliderView_Previews: PreviewProvider {
+    static var previews: some View {
+      ColorSliders(redColor: Binding.constant(155), greenColor: Binding.constant(50), blueColor: Binding.constant(85))
+    }
 }

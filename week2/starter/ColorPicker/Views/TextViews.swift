@@ -1,15 +1,15 @@
 /// Copyright (c) 2023 Kodeco Inc.
-///
+/// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
 /// in the Software without restriction, including without limitation the rights
 /// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 /// copies of the Software, and to permit persons to whom the Software is
 /// furnished to do so, subject to the following conditions:
-///
+/// 
 /// The above copyright notice and this permission notice shall be included in
 /// all copies or substantial portions of the Software.
-///
+/// 
 /// Notwithstanding the foregoing, you may not use, copy, modify, merge, publish,
 /// distribute, sublicense, create a derivative work, and/or sell copies of the
 /// Software in any work that is designed, intended, or marketed for pedagogical or
@@ -17,7 +17,7 @@
 /// or information technology.  Permission for such use, copying, modification,
 /// merger, publication, distribution, sublicensing, creation of derivative works,
 /// or sale is expressly withheld.
-///
+/// 
 /// This project and source code may use libraries or frameworks that are
 /// released under various Open-Source licenses. Use of those libraries and
 /// frameworks are governed by their own individual licenses.
@@ -32,43 +32,31 @@
 
 import SwiftUI
 
-struct ContentView: View {
-  private let initalColor = Color(
-    red: Constants.Color.redInit / Constants.maxValue,
-    green: Constants.Color.greenInit / Constants.maxValue,
-    blue: Constants.Color.greenInit / Constants.maxValue
-  )
-  @State private var alertIsVisible: Bool = false
-  @State private var redColor: Double = Constants.Color.redInit
-  @State private var greenColor: Double = Constants.Color.greenInit
-  @State private var blueColor: Double = Constants.Color.blueInit
-  @State private var foregroundColor: Color
-  
-  init() {
-    self.foregroundColor = self.initalColor
-  }
+struct TitleView: View {
+  var text: String
   
   var body: some View {
-
-    VStack {
-      TitleView(text: "Color Picker")
-      ColorVisualizer(foregroundColor: $foregroundColor)
-      ColorPickerControlsView(
-        redColor: $redColor,
-        greenColor: $greenColor,
-        blueColor: $blueColor,
-        foregroundColor: $foregroundColor
-      )
-    }
-    .padding(Constants.padding)
+    Text(text)
+      .font(.largeTitle)
+      .fontWeight(.bold)
   }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct SliderLabelView: View {
+  var text: String
+  
+  var body: some View {
+    Text(text)
+  }
+}
+
+
+
+struct TextViews_Previews: PreviewProvider {
   static var previews: some View {
-    ContentView()
-    ContentView()
-      .preferredColorScheme(.dark)
-      .previewInterfaceOrientation(.landscapeRight)
+    VStack {
+      TitleView(text: "Color Picker")
+      SliderLabelView(text: "Red")
+    }
   }
 }
