@@ -33,11 +33,12 @@
 import SwiftUI
 
 struct ContentView: View {
-  private let initalColor = Color(
+  private let initialColor = Color(
     red: Constants.Color.redInit / Constants.maxValue,
     green: Constants.Color.greenInit / Constants.maxValue,
     blue: Constants.Color.greenInit / Constants.maxValue
   )
+  @Environment(\.verticalSizeClass) var verticalSizeClass
   @State private var alertIsVisible: Bool = false
   @State private var redColor: Double = Constants.Color.redInit
   @State private var greenColor: Double = Constants.Color.greenInit
@@ -45,29 +46,68 @@ struct ContentView: View {
   @State private var foregroundColor: Color
   
   init() {
-    self.foregroundColor = self.initalColor
+    _foregroundColor = State(initialValue: self.initialColor)
   }
   
   var body: some View {
-
-    VStack {
-      TitleView(text: "Color Picker")
-      ColorVisualizer(foregroundColor: $foregroundColor)
-      ColorPickerControlsView(
-        redColor: $redColor,
-        greenColor: $greenColor,
-        blueColor: $blueColor,
-        foregroundColor: $foregroundColor
-      )
+    var ColorPickerApp = ColorPickerAppView(
+      foregroundColor: $foregroundColor,
+      redColor: $redColor,
+      greenColor: $greenColor,
+      blueColor: $blueColor
+    )
+    
+    // This is really buggy in Preview View, but works as expected in Simulator?!
+    // Will explore further...
+    if verticalSizeClass == .compact {
+      HStack {
+        ColorPickerApp
+      }
+      .padding(Constants.padding)
+    } else {
+      VStack {
+        ColorPickerApp
+      }
+      .padding(Constants.padding)
     }
-    .padding(Constants.padding)
+  }
+}
+
+struct ColorPickerAppView: View {
+  @Binding var foregroundColor: Color
+  @Binding var redColor: Double
+  @Binding var greenColor: Double
+  @Binding var blueColor: Double
+  
+  var body: some View {
+    TitleVisualizerView(text: "Color Picker", foregroundColor: $foregroundColor)
+    ColorPickerControlsView(
+      redColor: $redColor,
+      greenColor: $greenColor,
+      blueColor: $blueColor,
+      foregroundColor: $foregroundColor
+    )
+  }
+}
+
+struct TitleVisualizerView: View {
+  var text: String
+  @Binding var foregroundColor: Color
+  
+  var body: some View {
+    VStack {
+      TitleView(text: text)
+      ColorVisualizer(foregroundColor: $foregroundColor)
+    }
   }
 }
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
+      .previewDevice("iPhone 14")
     ContentView()
+      .previewDevice("iPhone 14")
       .preferredColorScheme(.dark)
       .previewInterfaceOrientation(.landscapeRight)
   }
